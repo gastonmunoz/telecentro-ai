@@ -43,6 +43,7 @@ export interface ProductItem {
 
 export enum AppSection {
   HOME = 'home',
+  DISRUPTIVE_LANDING = 'disruptive_landing',
   QUIZ = 'quiz',
   WIFI_SCANNER = 'wifi_scanner',
   MODEM_GUIDE = 'modem_guide',

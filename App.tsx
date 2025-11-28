@@ -10,6 +10,7 @@ import ProductUniverse from './components/ProductUniverse';
 import BillAnalyzer from './components/BillAnalyzer';
 import NetworkPredictor from "./components/NetworkPredictor";
 import SmartTroubleshootingAgent from "./components/SmartTroubleshootingAgent";
+import DisruptiveLanding from "./components/landing/DisruptiveLanding";
 import { AppSection } from "./types";
 
 const App: React.FC = () => {
@@ -40,155 +41,132 @@ const App: React.FC = () => {
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
       />
 
-      {/* Floating Dynamic Header */}
-      <header
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrolled ? "glass-dark py-3" : "bg-transparent py-6"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <div
-            className="flex items-center gap-2 cursor-pointer group"
-            onClick={() => navigateTo(AppSection.HOME)}
-          >
-            <span className="material-symbols-outlined text-3xl text-white group-hover:text-blue-400 transition-colors">
-              hub
-            </span>
-            <span className="text-xl font-bold tracking-tight text-white">
-              Telecentro<span className="text-blue-500">.AI</span>
-            </span>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-            <button
-              onClick={() => navigateTo(AppSection.CATALOG)}
-              className="hover:text-white transition-colors"
+      {/* Floating Dynamic Header - Hidden on Disruptive Landing */}
+      {activeSection !== AppSection.DISRUPTIVE_LANDING && (
+        <header
+          className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+            scrolled ? "glass-dark py-3" : "bg-transparent py-6"
+          }`}
+        >
+          <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <div
+              className="flex items-center gap-2 cursor-pointer group"
+              onClick={() => navigateTo(AppSection.HOME)}
             >
-              Productos
-            </button>
-            <button
-              onClick={() => navigateTo(AppSection.QUIZ)}
-              className="hover:text-white transition-colors"
-            >
-              Planes
-            </button>
+              <span className="material-symbols-outlined text-3xl text-white group-hover:text-blue-400 transition-colors">
+                hub
+              </span>
+              <span className="text-xl font-bold tracking-tight text-white">
+                Telecentro<span className="text-blue-500">.AI</span>
+              </span>
+            </div>
 
-            {/* AI Dropdown */}
-            <div className="relative group">
+            <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
               <button
-                className="flex items-center gap-1 hover:text-white transition-colors py-2"
-                onMouseEnter={() => setIsAiMenuOpen(true)}
+                onClick={() => navigateTo(AppSection.CATALOG)}
+                className="hover:text-white transition-colors"
               >
-                Telecentro.AI{" "}
-                <span className="material-symbols-outlined text-sm">
-                  expand_more
-                </span>
+                Productos
+              </button>
+              <button
+                onClick={() => navigateTo(AppSection.QUIZ)}
+                className="hover:text-white transition-colors"
+              >
+                Planes
               </button>
 
-              <div
-                className={`absolute top-full left-0 mt-2 w-64 bg-zinc-900/95 backdrop-blur-xl border border-zinc-800 rounded-2xl shadow-2xl p-2 transition-all duration-200 transform origin-top-left ${
-                  isAiMenuOpen || "group-hover:block hidden"
-                } `}
-                onMouseLeave={() => setIsAiMenuOpen(false)}
-              >
+              {/* AI Dropdown */}
+              <div className="relative group">
                 <button
-                  onClick={() => navigateTo(AppSection.MODEM_GUIDE)}
-                  className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
+                  className="flex items-center gap-1 hover:text-white transition-colors py-2"
+                  onMouseEnter={() => setIsAiMenuOpen(true)}
                 >
-                  <span className="material-symbols-outlined text-purple-400">
-                    router
+                  Telecentro.AI{" "}
+                  <span className="material-symbols-outlined text-sm">
+                    expand_more
                   </span>
-                  <div>
-                    <div className="text-white font-bold">Revisar Módem</div>
-                    <div className="text-xs text-zinc-500">
-                      Diagnóstico por video
-                    </div>
-                  </div>
                 </button>
-                <button
-                  onClick={() => navigateTo(AppSection.WIFI_SCANNER)}
-                  className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
-                >
-                  <span className="material-symbols-outlined text-blue-400">
-                    center_focus_weak
-                  </span>
-                  <div>
-                    <div className="text-white font-bold">Revisar WiFi</div>
-                    <div className="text-xs text-zinc-500">
-                      Optimizá tu señal
-                    </div>
-                  </div>
-                </button>
-                <button
-                  onClick={() => navigateTo(AppSection.QUIZ)}
-                  className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
-                >
-                  <span className="material-symbols-outlined text-pink-400">
-                    psychology
-                  </span>
-                  <div>
-                    <div className="text-white font-bold">Elegir Plan</div>
-                    <div className="text-xs text-zinc-500">Tu plan ideal</div>
-                  </div>
-                </button>
-                <button
-                  onClick={() => navigateTo(AppSection.BILL_ANALYZER)}
-                  className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
-                >
-                  <span className="material-symbols-outlined text-green-400">
-                    receipt_long
-                  </span>
-                  <div>
-                    <div className="text-white font-bold">
-                      Análisis de Factura
-                    </div>
-                    <div className="text-xs text-zinc-500">
-                      Entendé tu factura
-                    </div>
-                  </div>
-                </button>
-                <button
-                  onClick={() => navigateTo(AppSection.NETWORK_PREDICTOR)}
-                  className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
-                >
-                  <span className="material-symbols-outlined text-cyan-400">
-                    auto_awesome
-                  </span>
-                  <div>
-                    <div className="text-white font-bold">
-                      Aviso de Problemas
-                    </div>
-                    <div className="text-xs text-zinc-500">
-                      Te avisamos antes
-                    </div>
-                  </div>
-                </button>
-                <button
-                  onClick={() => navigateTo(AppSection.TROUBLESHOOTING_AGENT)}
-                  className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
-                >
-                  <span className="material-symbols-outlined text-orange-400">
-                    support_agent
-                  </span>
-                  <div>
-                    <div className="text-white font-bold">
-                      Solución Automática
-                    </div>
-                    <div className="text-xs text-zinc-500">Se arregla solo</div>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </nav>
 
-          <button className="bg-white text-black px-5 py-2 rounded-full font-bold text-xs hover:bg-slate-200 transition transform hover:scale-105">
-            Sucursal Virtual
-          </button>
-        </div>
-      </header>
+                <div
+                  className={`absolute top-full left-0 mt-2 w-64 bg-zinc-900/95 backdrop-blur-xl border border-zinc-800 rounded-2xl shadow-2xl p-2 transition-all duration-200 transform origin-top-left ${
+                    isAiMenuOpen || "group-hover:block hidden"
+                  } `}
+                  onMouseLeave={() => setIsAiMenuOpen(false)}
+                >
+                  <button
+                    onClick={() => navigateTo(AppSection.MODEM_GUIDE)}
+                    className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-purple-400">
+                      router
+                    </span>
+                    <div>
+                      <div className="text-white font-bold">Revisar Módem</div>
+                      <div className="text-xs text-zinc-500">
+                        Diagnóstico por video
+                      </div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => navigateTo(AppSection.WIFI_SCANNER)}
+                    className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-blue-400">
+                      center_focus_weak
+                    </span>
+                    <div>
+                      <div className="text-white font-bold">Revisar WiFi</div>
+                      <div className="text-xs text-zinc-500">
+                        Optimizá tu señal
+                      </div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => navigateTo(AppSection.QUIZ)}
+                    className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-pink-400">
+                      psychology
+                    </span>
+                    <div>
+                      <div className="text-white font-bold">Elegir Plan</div>
+                      <div className="text-xs text-zinc-500">Tu plan ideal</div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => navigateTo(AppSection.BILL_ANALYZER)}
+                    className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-zinc-800 text-left transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-green-400">
+                      receipt_long
+                    </span>
+                    <div>
+                      <div className="text-white font-bold">
+                        Análisis de Factura
+                      </div>
+                      <div className="text-xs text-zinc-500">
+                        Entendé tu factura
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </nav>
+
+            <button className="bg-white text-black px-5 py-2 rounded-full font-bold text-xs hover:bg-slate-200 transition transform hover:scale-105">
+              Sucursal Virtual
+            </button>
+          </div>
+        </header>
+      )}
 
       {/* Main Content */}
       <main className="flex-grow pt-24">
+        {/* === DISRUPTIVE LANDING PAGE === */}
+        {activeSection === AppSection.DISRUPTIVE_LANDING && (
+          <DisruptiveLanding />
+        )}
+
         {/* === LANDING PAGE (Apple Style) === */}
         {activeSection === AppSection.HOME && (
           <div className="bg-black text-white -mt-24">
@@ -358,73 +336,7 @@ const App: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Card 5: Network Predictor (NEW - Featured) */}
-                <div
-                  onClick={() => navigateTo(AppSection.NETWORK_PREDICTOR)}
-                  className="group md:col-span-2 md:row-span-1 rounded-[2rem] bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-600 relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform shadow-2xl shadow-purple-500/50"
-                >
-                  <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-black/40 z-10"></div>
-                    <img
-                      src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop"
-                      alt="AI Network"
-                      className="w-full h-full object-cover opacity-30 group-hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="relative z-10 p-8 flex flex-col md:flex-row items-center justify-between h-full">
-                    <div className="flex-1">
-                      <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-mono uppercase tracking-widest">
-                        <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></span>
-                        NUEVO
-                      </div>
-                      <h3 className="text-3xl md:text-4xl font-black text-white mb-2">
-                        Aviso de Problemas
-                      </h3>
-                      <p className="text-blue-100 text-lg">
-                        Te avisamos antes de que tengas problemas. La IA detecta
-                        cuando algo puede fallar.
-                      </p>
-                    </div>
-                    <span className="material-symbols-outlined text-[100px] text-white opacity-30 group-hover:opacity-50 group-hover:scale-110 transition-all duration-500 z-10">
-                      auto_awesome
-                    </span>
-                  </div>
-                </div>
-
-                {/* Card 6: Smart Troubleshooting (NEW - Featured) */}
-                <div
-                  onClick={() => navigateTo(AppSection.TROUBLESHOOTING_AGENT)}
-                  className="group md:col-span-2 md:row-span-1 rounded-[2rem] bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform shadow-2xl shadow-orange-500/50"
-                >
-                  <div className="absolute inset-0 z-0">
-                    <div className="absolute inset-0 bg-black/40 z-10"></div>
-                    <img
-                      src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop"
-                      alt="AI Troubleshooting"
-                      className="w-full h-full object-cover opacity-30 group-hover:scale-110 transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="relative z-10 p-8 flex flex-col md:flex-row items-center justify-between h-full">
-                    <div className="flex-1">
-                      <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs font-mono uppercase tracking-widest">
-                        <span className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse"></span>
-                        ARREGLO AUTOMÁTICO
-                      </div>
-                      <h3 className="text-3xl md:text-4xl font-black text-white mb-2">
-                        Solución Automática
-                      </h3>
-                      <p className="text-orange-100 text-lg">
-                        Se arregla solo. La IA detecta el problema y lo
-                        soluciona sin que hagas nada.
-                      </p>
-                    </div>
-                    <span className="material-symbols-outlined text-[100px] text-white opacity-30 group-hover:opacity-50 group-hover:scale-110 transition-all duration-500 z-10">
-                      support_agent
-                    </span>
-                  </div>
-                </div>
-
-                {/* Card 7: Catalog (Wide - Bottom) */}
+                {/* Card 5: Catalog (Wide - Bottom) */}
                 <div
                   onClick={() => navigateTo(AppSection.CATALOG)}
                   className="group md:col-span-3 md:row-span-1 rounded-[2rem] bg-zinc-100 relative overflow-hidden cursor-pointer transition-transform hover:scale-[1.01] p-8 flex items-center justify-between"
@@ -646,105 +558,108 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Global AI Assistant */}
-      <ChatBot />
+      {/* Global AI Assistant - Hidden on Disruptive Landing */}
+      {activeSection !== AppSection.DISRUPTIVE_LANDING && <ChatBot />}
 
-      <footer className="bg-black text-zinc-500 py-16 border-t border-zinc-900">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="col-span-1 md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="material-symbols-outlined text-2xl text-zinc-300">
-                hub
-              </span>
-              <span className="text-lg font-bold text-white">Telecentro</span>
+      {/* Footer - Hidden on Disruptive Landing */}
+      {activeSection !== AppSection.DISRUPTIVE_LANDING && (
+        <footer className="bg-black text-zinc-500 py-16 border-t border-zinc-900">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div className="col-span-1 md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="material-symbols-outlined text-2xl text-zinc-300">
+                  hub
+                </span>
+                <span className="text-lg font-bold text-white">Telecentro</span>
+              </div>
+              <p className="text-sm">
+                Llevando el futuro a tu hogar desde hace 30 años. Ahora
+                potenciado por IA.
+              </p>
             </div>
-            <p className="text-sm">
-              Llevando el futuro a tu hogar desde hace 30 años. Ahora potenciado
-              por IA.
-            </p>
+            <div>
+              <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">
+                Servicios
+              </h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Internet WiFi 7
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Televisión 4K
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Telefonía Fix
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">
+                Soporte
+              </h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Centro de Ayuda
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Sucursal Virtual
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Botón de arrepentimiento
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">
+                Legal
+              </h4>
+              <ul className="space-y-3 text-sm">
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Términos y Condiciones
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Privacidad
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    Defensa al Consumidor
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">
-              Servicios
-            </h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a href="#" className="hover:text-blue-400 transition-colors">
-                  Internet WiFi 7
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-blue-400 transition-colors">
-                  Televisión 4K
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-blue-400 transition-colors">
-                  Telefonía Fix
-                </a>
-              </li>
-            </ul>
+          <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-xs">© 2024 Telecentro S.A. Argentina.</p>
+            <div className="flex gap-4 mt-4 md:mt-0">
+              <span className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 cursor-pointer text-white">
+                X
+              </span>
+              <span className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 cursor-pointer text-white">
+                Ig
+              </span>
+              <span className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 cursor-pointer text-white">
+                Fb
+              </span>
+            </div>
           </div>
-          <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">
-              Soporte
-            </h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a href="#" className="hover:text-blue-400 transition-colors">
-                  Centro de Ayuda
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-blue-400 transition-colors">
-                  Sucursal Virtual
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-blue-400 transition-colors">
-                  Botón de arrepentimiento
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">
-              Legal
-            </h4>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a href="#" className="hover:text-blue-400 transition-colors">
-                  Términos y Condiciones
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-blue-400 transition-colors">
-                  Privacidad
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-blue-400 transition-colors">
-                  Defensa al Consumidor
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-zinc-900 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-xs">© 2024 Telecentro S.A. Argentina.</p>
-          <div className="flex gap-4 mt-4 md:mt-0">
-            <span className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 cursor-pointer text-white">
-              X
-            </span>
-            <span className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 cursor-pointer text-white">
-              Ig
-            </span>
-            <span className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 cursor-pointer text-white">
-              Fb
-            </span>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 };
