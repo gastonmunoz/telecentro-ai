@@ -37,9 +37,9 @@ const RoomScanner: React.FC = () => {
         <div className="mb-10">
           <div className="inline-flex items-center gap-2 mb-4 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-mono uppercase tracking-widest">
             <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
-            Vision AI V.2.0
+            Visión Inteligente V.2.0
           </div>
-          <h2 className="text-4xl font-black text-white mb-4 leading-tight">WiFi <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Coverage Scan</span></h2>
+          <h2 className="text-4xl font-black text-white mb-4 leading-tight">WiFi <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Revisar Cobertura</span></h2>
           <p className="text-zinc-400 text-lg leading-relaxed">
             Nuestra IA analiza la geometría y materiales de tu habitación para calcular la propagación de señal óptima.
           </p>
@@ -48,12 +48,12 @@ const RoomScanner: React.FC = () => {
         <label className="group cursor-pointer relative overflow-hidden bg-white text-black font-bold py-5 px-8 rounded-xl shadow-lg hover:shadow-blue-500/20 transition-all hover:-translate-y-1 text-center flex items-center justify-center gap-3">
           <div className="absolute inset-0 bg-gradient-to-r from-zinc-200 to-white opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <span className="material-symbols-outlined relative z-10">center_focus_strong</span>
-          <span className="relative z-10">Escanear Ambiente</span>
+          <span className="relative z-10">Revisar Ambiente</span>
           <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
         </label>
         
         <p className="text-xs text-zinc-600 mt-6 text-center font-mono">
-          SECURE UPLOAD // ENCRYPTED ANALYSIS
+          SUBIDA SEGURA // ANÁLISIS PROTEGIDO
         </p>
       </div>
 

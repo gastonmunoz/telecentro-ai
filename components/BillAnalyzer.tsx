@@ -4,21 +4,34 @@ import ReactMarkdown from 'react-markdown';
 
 const BillAnalyzer: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [fileType, setFileType] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [analysis, setAnalysis] = useState<string>('');
   const [dragActive, setDragActive] = useState(false);
 
-  const handleFile = async (file: File) => {
+  const handleFile = async (selectedFile: File) => {
     setLoading(true);
     setAnalysis('');
+    setFile(selectedFile);
+    setFileType(selectedFile.type);
+    
     try {
-      const base64 = await fileToGenerativePart(file);
-      setImage(`data:${file.type};base64,${base64}`);
-      const result = await analyzeBill(base64, file.type);
+      const base64 = await fileToGenerativePart(selectedFile);
+      
+      // Para PDFs, crear URL para vista previa
+      if (selectedFile.type === 'application/pdf') {
+        const pdfUrl = URL.createObjectURL(selectedFile);
+        setImage(pdfUrl);
+      } else {
+        setImage(`data:${selectedFile.type};base64,${base64}`);
+      }
+      
+      const result = await analyzeBill(base64, selectedFile.type);
       setAnalysis(result || "No se pudo analizar la factura.");
     } catch (error) {
       console.error(error);
-      setAnalysis("Hubo un error al procesar la imagen. Intentá de nuevo.");
+      setAnalysis("Hubo un error al procesar el documento. Intentá de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -67,7 +80,7 @@ const BillAnalyzer: React.FC = () => {
             </p>
          </div>
          <div className={`px-4 py-1.5 rounded-full text-xs font-bold border ${loading ? 'border-yellow-500/50 text-yellow-500 bg-yellow-500/10' : 'border-green-500/50 text-green-500 bg-green-500/10'}`}>
-            {loading ? 'ANALIZANDO...' : 'SISTEMA ONLINE'}
+            {loading ? 'ANALIZANDO...' : 'SISTEMA ACTIVO'}
          </div>
       </div>
 
@@ -85,13 +98,47 @@ const BillAnalyzer: React.FC = () => {
              onDrop={handleDrop}
            >
              {image ? (
-               <div className="relative w-full h-full rounded-xl overflow-hidden group">
-                 <img src={image} alt="Factura" className="w-full h-full object-contain opacity-80" />
-                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => setImage(null)} className="bg-red-600 text-white px-6 py-2 rounded-full font-bold hover:bg-red-500 transition">
-                       Eliminar
-                    </button>
-                 </div>
+               <div className="relative w-full h-full rounded-xl overflow-hidden group flex flex-col">
+                 {fileType === 'application/pdf' ? (
+                   <>
+                     <iframe
+                       src={image}
+                       className="flex-grow w-full border-0 rounded-t-xl"
+                       title="Vista previa PDF"
+                     />
+                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                       <button 
+                         onClick={() => {
+                           setImage(null);
+                           setFile(null);
+                           setFileType('');
+                           if (fileType === 'application/pdf' && image.startsWith('blob:')) {
+                             URL.revokeObjectURL(image);
+                           }
+                         }} 
+                         className="bg-red-600 text-white px-6 py-2 rounded-full font-bold hover:bg-red-500 transition"
+                       >
+                         Eliminar
+                       </button>
+                     </div>
+                   </>
+                 ) : (
+                   <>
+                     <img src={image} alt="Factura" className="w-full h-full object-contain opacity-80" />
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-center p-6 opacity-0 group-hover:opacity-100 transition-opacity">
+                       <button 
+                         onClick={() => {
+                           setImage(null);
+                           setFile(null);
+                           setFileType('');
+                         }} 
+                         className="bg-red-600 text-white px-6 py-2 rounded-full font-bold hover:bg-red-500 transition"
+                       >
+                         Eliminar
+                       </button>
+                     </div>
+                   </>
+                 )}
                </div>
              ) : (
                <>
@@ -124,7 +171,7 @@ const BillAnalyzer: React.FC = () => {
              <div className="h-full flex flex-col">
                 <div className="flex items-center gap-2 mb-6 text-green-400 font-mono text-xs">
                    <span className="material-symbols-outlined text-sm">terminal</span>
-                   <span>ANALYSIS_COMPLETE</span>
+                   <span>ANÁLISIS COMPLETO</span>
                 </div>
                 <div className="flex-grow overflow-y-auto pr-2 custom-scrollbar prose prose-invert prose-green max-w-none">
                    <ReactMarkdown>{analysis}</ReactMarkdown>

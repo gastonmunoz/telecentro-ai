@@ -48,5 +48,7 @@ export enum AppSection {
   MODEM_GUIDE = 'modem_guide',
   DECO_ANDROID = 'deco_android',
   CATALOG = 'catalog',
-  BILL_ANALYZER = 'bill_analyzer'
+  BILL_ANALYZER = 'bill_analyzer',
+  NETWORK_PREDICTOR = 'network_predictor',
+  TROUBLESHOOTING_AGENT = 'troubleshooting_agent'
 }

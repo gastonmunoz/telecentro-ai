@@ -1,5 +1,5 @@
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-import { SYSTEM_INSTRUCTION_CHAT, SYSTEM_INSTRUCTION_WIFI, SYSTEM_INSTRUCTION_BILL } from '../constants';
+import { SYSTEM_INSTRUCTION_CHAT, SYSTEM_INSTRUCTION_WIFI, SYSTEM_INSTRUCTION_BILL, SYSTEM_INSTRUCTION_PREDICTOR, SYSTEM_INSTRUCTION_TROUBLESHOOTING } from '../constants';
 
 // Helper to convert File/Blob to Base64
 export const fileToGenerativePart = async (file: File): Promise<string> => {
@@ -56,7 +56,7 @@ export const analyzeRoomForWiFi = async (
           },
         },
         {
-          text: "Analizá esta imagen para optimizar la señal WiFi de Telecentro. ¿Hay obstáculos? ¿Necesito Mesh? Sé breve y técnico.",
+          text: "Analizá esta imagen y dame un resumen breve: ¿dónde poner el router? ¿necesito Mesh? Un consejo principal.",
         },
       ],
     },
@@ -83,7 +83,7 @@ export const diagnoseModemIssue = async (
           },
         },
         {
-          text: "Actuá como un técnico de Telecentro. Analizá este video o imagen del módem. Identificá el estado de las luces (Power, DS, US, Online, WiFi). Si parpadean o están apagadas, indicá qué significa y dame una solución paso a paso para que recupere la conexión. Formato Markdown, sé claro y empático.",
+          text: "Analizá el estado de las luces del módem. Si hay problemas, dame un diagnóstico breve (2-3 líneas) y la solución principal en pasos cortos. Sé directo.",
         },
       ],
     },
@@ -104,12 +104,69 @@ export const analyzeBill = async (base64Image: string, mimeType: string) => {
           },
         },
         {
-          text: "Explicame esta factura de Telecentro detalladamente. ¿Qué estoy pagando? ¿Hay algo inusual?",
+          text: "Analizá esta factura de Telecentro y dame un resumen breve. ¿Cuánto tengo que pagar? ¿Hay algo importante que deba saber?",
         },
       ],
     },
     config: {
       systemInstruction: SYSTEM_INSTRUCTION_BILL,
+    },
+  });
+  return response.text;
+};
+
+export const predictNetworkIssues = async (historicalData: string) => {
+  const ai = getAI();
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: {
+      parts: [
+        {
+          text: `Analizá estos datos y dame un resumen breve (máximo 6-8 líneas):
+
+${historicalData}
+
+Incluí:
+- 2-3 problemas principales con probabilidad y cuándo
+- Patrón detectado (ej: horas pico)
+- Una recomendación concreta
+
+Sé conciso y directo.`,
+        },
+      ],
+    },
+    config: {
+      systemInstruction: SYSTEM_INSTRUCTION_PREDICTOR,
+      temperature: 0.3, // Más determinístico para predicciones
+    },
+  });
+  return response.text;
+};
+
+export const troubleshootNetworkIssue = async (issueData: string) => {
+  const ai = getAI();
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: {
+      parts: [
+        {
+          text: `Analizá este problema y dame un diagnóstico breve (máximo 5-6 líneas):
+
+${issueData}
+
+Incluí:
+- Problema identificado (una línea)
+- Causa probable (una línea)
+- Solución principal en 2-3 pasos cortos
+- Si necesita soporte humano (solo si es necesario)
+
+Sé conciso y priorizá soluciones automáticas.`,
+        },
+      ],
+    },
+    config: {
+      systemInstruction: SYSTEM_INSTRUCTION_TROUBLESHOOTING,
+      temperature: 0.2, // Muy determinístico para troubleshooting
     },
   });
   return response.text;

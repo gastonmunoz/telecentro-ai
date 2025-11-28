@@ -107,7 +107,7 @@ const ModemGuide: React.FC = () => {
                  <div className="inline-block p-4 rounded-full bg-purple-500/10 mb-4 animate-pulse-slow">
                     <span className="material-symbols-outlined text-4xl text-purple-400">smart_toy</span>
                  </div>
-                 <h2 className="text-3xl font-black text-white mb-4">Modem Analyzer</h2>
+                 <h2 className="text-3xl font-black text-white mb-4">Revisar Módem</h2>
                  <p className="text-zinc-400 text-sm leading-relaxed max-w-xs mx-auto">
                    Nuestra IA visual detecta el estado de tu servicio en segundos.
                  </p>
