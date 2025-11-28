@@ -1,0 +1,8 @@
+{
+  "name": "Telecentro AI",
+  "description": "Experimentá el futuro de la conectividad. Inteligencia Artificial aplicada a tu hogar.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
