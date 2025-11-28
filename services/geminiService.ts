@@ -17,66 +17,77 @@ export const fileToGenerativePart = async (file: File): Promise<string> => {
 };
 
 // Initialize Gemini Client
-const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
+const getAI = () =>
+  new GoogleGenAI({ apiKey: "AIzaSyB3dDnZMvPWBD6kVk8uFWFouZFJaP9DquE" });
 
 export const chatWithGemini = async (
-  history: { role: 'user' | 'model'; text: string }[],
+  history: { role: "user" | "model"; text: string }[],
   newMessage: string
 ) => {
   const ai = getAI();
   const chat = ai.chats.create({
-    model: 'gemini-3-pro-preview',
+    model: "gemini-2.5-flash",
     config: {
       systemInstruction: SYSTEM_INSTRUCTION_CHAT,
       temperature: 0.7,
     },
-    history: history.map(h => ({
+    history: history.map((h) => ({
       role: h.role,
-      parts: [{ text: h.text }]
-    }))
+      parts: [{ text: h.text }],
+    })),
   });
 
   const result = await chat.sendMessageStream({ message: newMessage });
   return result;
 };
 
-export const analyzeRoomForWiFi = async (base64Image: string, mimeType: string) => {
+export const analyzeRoomForWiFi = async (
+  base64Image: string,
+  mimeType: string
+) => {
   const ai = getAI();
   const response = await ai.models.generateContent({
-    model: 'gemini-3-pro-preview',
+    model: "gemini-2.5-flash",
     contents: {
       parts: [
         {
           inlineData: {
             mimeType: mimeType,
-            data: base64Image
-          }
+            data: base64Image,
+          },
         },
-        { text: "Analizá esta imagen para optimizar la señal WiFi de Telecentro. ¿Hay obstáculos? ¿Necesito Mesh? Sé breve y técnico." }
-      ]
+        {
+          text: "Analizá esta imagen para optimizar la señal WiFi de Telecentro. ¿Hay obstáculos? ¿Necesito Mesh? Sé breve y técnico.",
+        },
+      ],
     },
     config: {
       systemInstruction: SYSTEM_INSTRUCTION_WIFI,
-    }
+    },
   });
   return response.text;
 };
 
-export const diagnoseModemIssue = async (base64Data: string, mimeType: string) => {
+export const diagnoseModemIssue = async (
+  base64Data: string,
+  mimeType: string
+) => {
   const ai = getAI();
   const response = await ai.models.generateContent({
-    model: 'gemini-3-pro-preview',
+    model: "gemini-2.5-flash",
     contents: {
       parts: [
         {
           inlineData: {
-             mimeType: mimeType,
-             data: base64Data
-          }
+            mimeType: mimeType,
+            data: base64Data,
+          },
         },
-        { text: "Actuá como un técnico de Telecentro. Analizá este video o imagen del módem. Identificá el estado de las luces (Power, DS, US, Online, WiFi). Si parpadean o están apagadas, indicá qué significa y dame una solución paso a paso para que recupere la conexión. Formato Markdown, sé claro y empático." }
-      ]
-    }
+        {
+          text: "Actuá como un técnico de Telecentro. Analizá este video o imagen del módem. Identificá el estado de las luces (Power, DS, US, Online, WiFi). Si parpadean o están apagadas, indicá qué significa y dame una solución paso a paso para que recupere la conexión. Formato Markdown, sé claro y empático.",
+        },
+      ],
+    },
   });
   return response.text;
 };
@@ -84,21 +95,23 @@ export const diagnoseModemIssue = async (base64Data: string, mimeType: string) =
 export const analyzeBill = async (base64Image: string, mimeType: string) => {
   const ai = getAI();
   const response = await ai.models.generateContent({
-    model: 'gemini-3-pro-preview',
+    model: "gemini-2.5-flash",
     contents: {
       parts: [
         {
           inlineData: {
             mimeType: mimeType,
-            data: base64Image
-          }
+            data: base64Image,
+          },
         },
-        { text: "Explicame esta factura de Telecentro detalladamente. ¿Qué estoy pagando? ¿Hay algo inusual?" }
-      ]
+        {
+          text: "Explicame esta factura de Telecentro detalladamente. ¿Qué estoy pagando? ¿Hay algo inusual?",
+        },
+      ],
     },
     config: {
       systemInstruction: SYSTEM_INSTRUCTION_BILL,
-    }
+    },
   });
   return response.text;
 };
