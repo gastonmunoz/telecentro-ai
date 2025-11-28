@@ -17,8 +17,7 @@ export const fileToGenerativePart = async (file: File): Promise<string> => {
 };
 
 // Initialize Gemini Client
-const getAI = () =>
-  new GoogleGenAI({ apiKey: "AIzaSyB3dDnZMvPWBD6kVk8uFWFouZFJaP9DquE" });
+const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const chatWithGemini = async (
   history: { role: "user" | "model"; text: string }[],
